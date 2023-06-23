@@ -16,3 +16,4 @@ jobs:
         working_directory: './terraform/'
         init: true
         validate: true
+        plan: true

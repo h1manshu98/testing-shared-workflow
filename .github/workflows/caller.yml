@@ -6,31 +6,31 @@ on:
   # inputs can be defined to use during workflow call. 
     inputs:
       working_directory:
-        description: 'Directory where complete example exist of the module.'
+        description: 'Directory where compleste example exist of the module.'
         required: false
         type: string
         default: './_example/complete/'
       
       init:
-        description: 'Directory where complete example exist of the module.'
+        description: 'Set this to true to run terraform init'
         required: false
         type: string
         default: false 
       
       validate:
-        description: 'Directory where complete example exist of the module.'
+        description: 'Set this to true to run terraform validate'
         required: false
         type: string
         default: false 
       
       plan:
-        description: 'Directory where complete example exist of the module.'
+        description: 'Set this to true to run terraform plan'
         required: false
         type: string
         default: false 
       
       apply:
-        description: 'Directory where complete example exist of the module.'
+        description: 'Set this to true to run terraform apply'
         required: false
         type: string
         default: false 
@@ -66,7 +66,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          # - ${{ needs.versionExtract.outputs.minVersion }}
+          - ${{ needs.versionExtract.outputs.minVersion }}
           - ${{ needs.versionExtract.outputs.maxVersion }}
         directory:
           - ${{ inputs.working_directory }}
@@ -82,19 +82,29 @@ jobs:
         with:
           terraform_version: ${{ matrix.version }}
 
-      # Terraform checks to Init and Validate terraform code. 
       - name: Terraform Init v${{ matrix.version }}
         if: ${{ (inputs.init == 'true') }}
         run: |
           cd ${{ matrix.directory }}
           terraform init
 
-      # Terraform checks to Init and Validate terraform code. 
       - name: Terraform validate v${{ matrix.version }}
         if: ${{ (inputs.validate == 'true') }}
         run: |
           cd ${{ matrix.directory }}
           terraform validate
+
+      - name: Terraform plan v${{ matrix.version }}
+        if: ${{ (inputs.plan == 'true') }}
+        run: |
+          cd ${{ matrix.directory }}
+          terraform plan
+
+      - name: Terraform apply v${{ matrix.version }}
+        if: ${{ (inputs.apply == 'true') && ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.event_name == 'push' }}
+        run: |
+          cd ${{ matrix.directory }}
+          terraform apply -auto-approve
 
   # Action to verfiy terraform formatting . 
   format:
