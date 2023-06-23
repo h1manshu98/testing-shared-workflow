@@ -13,6 +13,6 @@ jobs:
   tf-static-checks:
     uses: h1manshu98/testing-shared-workflow/.github/workflows/caller.yml@main
     with:  
-        working_directory: 'terraform/'
+        working_directory: './terraform/'
         init: true
         validate: true
