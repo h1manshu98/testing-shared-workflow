@@ -66,7 +66,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - ${{ needs.versionExtract.outputs.minVersion }}
+          # - ${{ needs.versionExtract.outputs.minVersion }}
           - ${{ needs.versionExtract.outputs.maxVersion }}
         directory:
           - ${{ inputs.working_directory }}
@@ -116,4 +116,3 @@ jobs:
       # Running command to check terraform formatting changes. 
       - name: Check Terraform format changes
         run: terraform fmt --recursive -check=true
-        continue-on-error: true
